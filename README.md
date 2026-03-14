@@ -69,6 +69,56 @@ The system is not yet ready for external use.
 
 ---
 
+## Implemented Minimal Architecture (Current)
+
+Based on the architecture description and OpenClaw integration direction, the repository now includes a runnable minimal stack:
+
+- **Node Server** (`node_server/`)
+	- Node register / unregister / heartbeat
+	- Node listing and typed listing
+	- Message routing (direct / broadcast / by node type)
+- **Shared Protocol Layer** (`shared/`)
+	- Unified node types
+	- Message schema and serialization
+	- Shared config and HTTP JSON utils
+- **Nodes** (`nodes/`)
+	- `BaseNode` (lifecycle + heartbeat + message sending)
+	- `RobotNode` (targeted commands: move / pick / place)
+	- `VLANode` (action planning stub)
+	- `ValueModelNode` (action scoring stub)
+	- `WorldModelNode` (next-state prediction stub)
+
+---
+
+## One-Command Minimal Demo
+
+Run:
+
+```bash
+./scripts/run_minimal_demo.sh
+```
+
+What it does:
+
+1. Starts the PhysClaw Node Server
+2. Starts and registers one `RobotNode`
+3. Accepts text input from terminal
+4. Tries to forward the text to `openclaw agent --message ...` (if OpenClaw CLI exists)
+5. Routes the command into `robot-demo-1` and executes robot action
+
+Example input:
+
+```text
+move to 1 2 3
+```
+
+Expected effect:
+
+- message routed by Node Server
+- robot node returns: `robot moved to pose [1.0, 2.0, 3.0]`
+
+---
+
 ## TODO Roadmap
 
 The following core components are currently under development:
